@@ -260,9 +260,14 @@ export default function Portfolio() {
       setLoginOpen(false);
       setMessage("Admin mode enabled. You can now manage activities.");
     } catch (error) {
-      setMessage(
-        error instanceof Error ? error.message : "Hindi makapag-login.",
-      );
+  const errorText =
+    error instanceof Error ? error.message.toLowerCase() : "";
+
+  setMessage(
+    errorText.includes("invalid login credentials")
+      ? "Incorrect email or password."
+      : "Unable to log in. Please try again.",
+  );
     } finally {
       setSaving(false);
     }
@@ -1123,7 +1128,19 @@ async function uploadThumbnail(file: File) {
                   required
                   autoComplete="email"
                 />
-              </label>
+              </label> 
+              {message && (
+  <p
+    role="alert"
+    style={{
+      color: "#ff7b7b",
+      fontSize: "14px",
+      margin: "10px 0 0",
+    }}
+  >
+    {message}
+  </p>
+)}
               <label>
                 Password
                 <input
